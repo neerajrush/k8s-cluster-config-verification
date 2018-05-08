@@ -1,0 +1,77 @@
+export HEKETI_CLI_SERVER=heketi-storage-glusterfs.testlab-dns.com
+export HEKETI_CLI_USER=admin
+export HEKETI_CLI_KEY="My Secrets"
+
+#heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 volume create --name=gluster-test-volume --size=3 --persistent-volume-file=gluster-test-pv.json
+
+# heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 volume list
+
+# heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 volume info d3877b9623de7986601404a55b8822e3
+
+#heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 topology info
+
+Storage-Class:
+apiVersion: storage.k8s.io/v1beta1
+kind: StorageClass  
+metadata:
+  name: heketi  
+provisioner: kubernetes.io/glusterfs   
+parameters:
+  resturl: "http://172.30.24.54:8080"  
+  restuser: "admin"  
+  restuserkey: "My Secrets"
+  
+PVC:
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: heketi-pvc 
+ namespace: Test-Glusterfs
+ annotations:
+   volume.beta.kubernetes.io/storage-class: heketi  
+spec:
+ accessModes:
+  - ReadWriteMany
+ resources:
+   requests:
+     storage: 3Gi
+
+PODs:
+
+apiVersion: v1
+id: gluster-test-pod
+kind: Pod
+metadata:
+  name: gluster-test-pod
+  namespace: Test-Glusterfs
+spec:
+  containers:
+    - name: gluster-test-pod
+      image: dockerio.com:5000/test-image:latest
+      volumeMounts:
+        - mountPath: /mnt/gluster 
+          name: gluster-test-volume
+  volumes:
+    - name: gluster-test-volume
+      persistentVolumeClaim:
+        claimName: heketi-pvc
+---
+apiVersion: v1
+id: gluster-test-pod-1
+kind: Pod
+metadata:
+  name: gluster-test-pod-1
+  namespace: Test-Glusterfs
+spec:
+  containers:
+    - name: gluster-test-pod-1
+      image: dockerio.com:5000/test-image:latest
+      volumeMounts:
+        - mountPath: /mnt/gluster 
+          name: gluster-test-volume
+  volumes:
+    - name: gluster-test-volume
+      persistentVolumeClaim:
+        claimName: heketi-pvc
+
