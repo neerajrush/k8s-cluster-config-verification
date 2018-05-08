@@ -2,13 +2,13 @@ export HEKETI_CLI_SERVER=heketi-storage-glusterfs.testlab-dns.com
 export HEKETI_CLI_USER=admin
 export HEKETI_CLI_KEY="My Secrets"
 
-#heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 volume create --name=gluster-test-volume --size=3 --persistent-volume-file=gluster-test-pv.json
+# heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 volume create --name=gluster-test-volume --size=3 --persistent-volume-file=gluster-test-pv.json
 
 # heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 volume list
 
 # heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 volume info d3877b9623de7986601404a55b8822e3
 
-#heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 topology info
+# heketi-cli -s http://heketi-storage-glusterfs.testlab-dns.com:5063 topology info
 
 Storage-Class:
 apiVersion: storage.k8s.io/v1beta1
